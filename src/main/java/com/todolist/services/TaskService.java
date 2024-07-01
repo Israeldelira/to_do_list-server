@@ -20,25 +20,39 @@ public class TaskService {
 		return taskRepository.findAll();
 	}
 
-	public Task createTask(Task task) {
-		return taskRepository.save(task);
-	}
+	public TaskService(TaskRepository taskRepository) {
+        this.taskRepository = taskRepository;
+    }
 
-	public Task updateTask(Long id, Task updatedTaskData) {
-		Optional<Task> optionalTask = taskRepository.findById(id);
+    public Task createTask(Task task) {
+        try {
+            return taskRepository.save(task);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error creating task", e);
+        }
+    }
 
-		if (optionalTask.isPresent()) {
-			Task existingTask = optionalTask.get();
-			existingTask.setTitle(updatedTaskData.getTitle());
-			existingTask.setDescription(updatedTaskData.getDescription());
-			existingTask.setIsComplete(updatedTaskData.isComplete());
-			existingTask.setPriority(updatedTaskData.getPriority());
+    public Task updateTask(Long id, Task updatedTaskData) {
+        try {
+            Optional<Task> optionalTask = taskRepository.findById(id);
 
-			return taskRepository.save(existingTask);
-		} else {
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "La tarea " + id + " No fue encontrada");
-		}
-	}
+            if (optionalTask.isPresent()) {
+                Task existingTask = optionalTask.get();
+                existingTask.setTitle(updatedTaskData.getTitle());
+                existingTask.setDescription(updatedTaskData.getDescription());
+                existingTask.setIsComplete(updatedTaskData.isComplete());
+                existingTask.setPriority(updatedTaskData.getPriority());
+
+                return taskRepository.save(existingTask);
+            } else {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Task not found with id: " + id);
+            }
+        } catch (ResponseStatusException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error updating task", e);
+        }
+    }
 
 	public Task deleteTask(Long taskId) {
 		Optional<Task> optionalTask = taskRepository.findById(taskId);

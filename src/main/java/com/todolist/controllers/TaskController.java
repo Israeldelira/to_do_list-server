@@ -23,7 +23,7 @@ public class TaskController {
 	@Autowired
 	private TaskService taskService;
 
-	// EndPoint to get all tasks
+	// EndPoint para obtener todas las tareas
 	@GetMapping
 	public ResponseEntity<List<Task>> getAllTasks() {
 		// Retrieve all tasks from the service
@@ -32,7 +32,7 @@ public class TaskController {
 		return new ResponseEntity<>(tasks, HttpStatus.OK);
 	}
 
-	// EndPoint to create a new task
+	// EndPoint para crear una nueva tarea
 	@PostMapping
 	public ResponseEntity<Task> createTask(@RequestBody Task task) {
 		// Create a new task with the provided description
@@ -41,20 +41,20 @@ public class TaskController {
 		return new ResponseEntity<>(createdTask, HttpStatus.CREATED);
 	}
 
-	// EndPoint to update a task by id
+	// EndPoint para actualizar una tarea por id tarea
 	@PutMapping("/{id}")
 	public ResponseEntity<Task> updateTask(@PathVariable Long id,@RequestBody Task taskUpdate) {
-		// Update the task with the provided id
 		Task updatedTask = taskService.updateTask(id,taskUpdate);
-		// Return the updated task with HTTP status OK
 		return new ResponseEntity<>(updatedTask, HttpStatus.OK);
 	}
 
+    // EndPoint para eliminar una tarea por id tarea
 	@DeleteMapping("/{taskId}")
     public Task deleteTask(@PathVariable Long taskId) {
         return taskService.deleteTask(taskId);
     }
 	
+	// EndPoint para filtrar de acuerdo a prioridad y si esta completada
 	@GetMapping("/filter")
 	public List<Task> filterTasks(
             @RequestParam(name = "priority", required = false) Long priority,
