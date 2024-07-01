@@ -41,15 +41,18 @@ public class TaskService {
 		}
 	}
 
-	public void deleteTask(Long id) {
-		try {
-			taskRepository.deleteById(id);
-		} catch (EmptyResultDataAccessException e) {
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "La tarea " + id + " No fue encontrada");
+	public Task deleteTask(Long taskId) {
+		Optional<Task> optionalTask = taskRepository.findById(taskId);
+		if (optionalTask.isPresent()) {
+			Task task = optionalTask.get();
+			taskRepository.delete(task);
+			return task;
+		} else {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "La tarea " + taskId + " No fue encontrada");
 		}
 	}
 
-	// Filtra por completado y prioridad
+	// Un solo metodo para el el filtrado de la informacion
 	public List<Task> findByFilter(Long priority, Boolean isComplete) {
 		if (priority == null && isComplete == null) {
 			// Caso sin filtros

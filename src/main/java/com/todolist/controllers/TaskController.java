@@ -50,14 +50,10 @@ public class TaskController {
 		return new ResponseEntity<>(updatedTask, HttpStatus.OK);
 	}
 
-	// EndPoint to delete a task by id
-	@DeleteMapping("/{id}")
-	public ResponseEntity<Void> deleteTask(@PathVariable Long id) {
-		// Delete the task with the provided id
-		taskService.deleteTask(id);
-		// Return NO_CONTENT status when the task is successfully deleted
-		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-	}
+	@DeleteMapping("/{taskId}")
+    public Task deleteTask(@PathVariable Long taskId) {
+        return taskService.deleteTask(taskId);
+    }
 	
 	@GetMapping("/filter")
 	public List<Task> filterTasks(
