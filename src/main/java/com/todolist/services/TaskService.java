@@ -28,7 +28,7 @@ public class TaskService {
         try {
             return taskRepository.save(task);
         } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error creating task", e);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error al crear la tarea ", e);
         }
     }
 
@@ -40,17 +40,17 @@ public class TaskService {
                 Task existingTask = optionalTask.get();
                 existingTask.setTitle(updatedTaskData.getTitle());
                 existingTask.setDescription(updatedTaskData.getDescription());
-                existingTask.setIsComplete(updatedTaskData.isComplete());
+                existingTask.setIsComplete(updatedTaskData.getIsComplete());
                 existingTask.setPriority(updatedTaskData.getPriority());
 
                 return taskRepository.save(existingTask);
             } else {
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Task not found with id: " + id);
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "La tarea " + id + " No fue encontrada");
             }
         } catch (ResponseStatusException e) {
             throw e;
         } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error updating task", e);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error al actualizar la tarea ", e);
         }
     }
 
@@ -67,6 +67,8 @@ public class TaskService {
 
 	// Un solo metodo para el el filtrado de la informacion
 	public List<Task> findByFilter(Long priority, Boolean isComplete) {
+		System.out.println("Status: " + isComplete);
+		System.out.println("Priority: " + priority);
 		if (priority == null && isComplete == null) {
 			// Caso sin filtros
 			return taskRepository.findAll();

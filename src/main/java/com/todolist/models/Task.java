@@ -64,7 +64,7 @@ public class Task {
         this.description = description;
     }
 
-    public boolean isComplete() {
+    public boolean getIsComplete() {
         return isComplete;
     }
 
@@ -92,7 +92,7 @@ public class Task {
         return updatedAt;
     }
 
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
+    public void setUpdatedAt(LocalDateTime UpdatedAt) {
+        this.updatedAt = UpdatedAt;
     }
 }
